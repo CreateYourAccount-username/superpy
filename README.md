@@ -19,7 +19,7 @@ Python library required: _Rich_  (which can be installed using:
 
 # Getting started:
 
-After pulling superpy to your local device, you will have 4 files (+ 1 readme file):
+After pulling superpy to your local device, you will have 5 files:
 
 - *date_functions.py* - Basically handles anything to do with dates. Setting the current date or advancing the date. It also handles string to date conversions and vice versa. 
 
@@ -28,6 +28,8 @@ After pulling superpy to your local device, you will have 4 files (+ 1 readme fi
 - *classes.py* - Handles the buy_item and sell_item classes.
 
 - *main.py* - Handles all CLI commands and also all the logic for adding/removeing/adjusting the inventory.
+
+- *README.md* - The readme file you are currently reading.
 
 After you have run all the various commands at least once, you will also have the following files:
 
@@ -41,11 +43,30 @@ After you have run all the various commands at least once, you will also have th
 
 # Using superpy
 
-There are 4 sifferent commands that you can use. 
+There are 4 different commands that you can use. 
 - buy
 - sell
 - advance-time
 - report
 
 This is also reflected by using the command <code>python main.py -h</code>
+
+## buy 
+
+## sell
+
+## advance-time
+Make use of the advance-time command by typing <code>python main.py advance-time *x*</code>
+Where *x* can be substituted the following: 
+- *show* - This will display the current date. ```
+> python main.py advance-time show
+Current date is:
+2021-04-07
+```
+
+
+
+Help can also be accessed from the command line using: 
+<code>python main.py advance-time -h</code>
+## report
 
