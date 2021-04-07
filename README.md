@@ -60,13 +60,13 @@ Make use of the advance-time command by typing <code>python main.py advance-time
 Where *x* can be substituted the following: 
 
 *show* - This will display the current date. 
-    ```
-    > python main.py advance-time show
-    Current date is:
-    2021-04-07
-    ```
+        ```
+        > python main.py advance-time show
+        Current date is:
+        2021-04-07
+        ```
 
-*show* - This will display the current date.
+*reset* - This will reset the date to match the system's date.
 
 
 
