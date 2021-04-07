@@ -58,11 +58,16 @@ This is also reflected by using the command <code>python main.py -h</code>
 ## advance-time
 Make use of the advance-time command by typing <code>python main.py advance-time *x*</code>
 Where *x* can be substituted the following: 
-- *show* - This will display the current date. ```
-> python main.py advance-time show
-Current date is:
-2021-04-07
-```
+
+*show* - This will display the current date. 
+    ```
+    > python main.py advance-time show
+    Current date is:
+    2021-04-07
+    ```
+
+*show* - This will display the current date.
+
 
 
 
