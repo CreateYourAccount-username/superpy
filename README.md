@@ -8,14 +8,7 @@ Features include adding and removing products from inventory, and producing vari
 #### Requirements:
 Superpy is designed and tested to run on a Windows 10 system. 
 
-Python version required: 
+Python version required: _Python 3.9.2_
 
-Python 3.9.2
-
-Python library required:
-
-Rich
-
-This can be installed using: 
-
+Python library required: _Rich_, which can be installed using: 
 <code>pip install rich</code>
