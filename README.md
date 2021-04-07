@@ -19,7 +19,7 @@ Python library required: _Rich_  (which can be installed using:
 
 **Getting started:**
 
-After pulling superpy to your local device, you will have 3 files (+ 1 readme file):
+After pulling superpy to your local device, you will have 4 files (+ 1 readme file):
 
 
 *date_functions.py* 
@@ -31,9 +31,31 @@ Setting the current date or advancing the date. It also handles string to date c
 
 Handles reading and writing files. Checks if superpy is running in the correct directory. And if necessary creates files required to run the program (normally just the first time).
 
+*classes.py*
+
+Handles the buy_item and sell_item classes.
+
 *main.py*
 
 Handles all CLI commands and also all the logic for adding/removeing/adjusting the inventory.
+
+After you have run all the command at least once, you will also have the following:
+
+*bought.csv*
+
+Log of all bought items
+
+*sold.csv*
+
+Log of all sold items
+
+*inventory.csv*
+
+Inventory file, used as a variable by the program.
+
+*date.txt*
+
+Stores date variable.
 
 
 
