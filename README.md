@@ -10,5 +10,5 @@ Superpy is designed and tested to run on a Windows 10 system.
 
 Python version required: _Python 3.9.2_
 
-Python library required: _Rich_, which can be installed using: 
-<code>pip install rich</code>
+Python library required: _Rich_  (which can be installed using: 
+<code>pip install rich</code>)
