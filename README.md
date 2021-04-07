@@ -4,7 +4,6 @@
 **What is superpy?**
 
 Superpy is a basic inventory control software, designed for a supermarket.
-
 Features include adding and removing products from inventory, and producing various reports (profit/revenue/current inventory).
 
 <br/>
