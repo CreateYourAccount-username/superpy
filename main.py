@@ -44,8 +44,8 @@ def main():
                 else:
                     raise ValueError
             except ValueError:
-                console.print('[bold red]invalid input, \
-                    has to be positive integer, "reset" or "show"[/bold red]')
+                console.print(
+                    '[bold red]invalid input, has to be positive integer, "reset" or "show"[/bold red]')
 
     elif args.command is None:
         console.print('[bold red]\t ERROR: no command given, \

@@ -43,6 +43,8 @@ After you have run all the various commands at least once, you will also have th
 
 # Using superpy
 
+Before you start, ***make sure the directory name is 'superpy'.***
+
 There are 4 different commands that you can use. 
 - buy
 - sell
@@ -66,14 +68,27 @@ Where *x* can be substituted the following:
     2021-04-07
     ```
 
-*reset* - This will reset the date to match the system's date.
+- *reset* - This will reset the date to match the system's date.
     ```
     > python main.py advance-time reset
     Date successfully reset.
     Current date is:
     2021-04-07
     ```
+- The amount of days you want to advance your date with. Has to be a positive integer.
+    ```
+    > python main.py advance-time 10
+    date is advanced by 10 days
+    new date is 2021-04-17
+    ```
 
+Superpy will inform you when products have expired in the days that you have skipped, for example:
+```
+    > python main.py advance-time 10
+    date is advanced by 10 days
+    new date is 2021-04-17
+    Item "orange" expired on: 2021-04-10
+```
 
 
 Help can also be accessed from the command line using: 
