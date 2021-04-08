@@ -58,7 +58,7 @@ This is also reflected by using the command <code>python main.py -h</code>
 ## sell
 
 ## advance-time
-Make use of the advance-time command by typing <code>python main.py advance-time *x*</code>
+Make use of the *advance-time* command by typing <code>python main.py advance-time *x*</code>
 Where *x* can be substituted the following: 
 
 - *show* - This will display the current date. 
@@ -90,8 +90,48 @@ Superpy will inform you when products have expired in the days that you have ski
     Item "orange" expired on: 2021-04-10
 ```
 
+Keep in mind the superpy software does not automatically advances its date every day, due to customer requirements. Every new day the customer should command the software to update it's internal date to the current date using <code>python main.py advance-time reset</code>
 
 Help can also be accessed from the command line using: 
 <code>python main.py advance-time -h</code>
 ## report
+Make use of the *report* command by typing <code>python main.py advance-time \<type> \<date>.</code>
+Where *\<type*> is the type of report and *\<date>* is the date or period you want the report for. 
+
+The following reports are possible:
+- *inventory *- This gives the inventory on the date given. 
+- *revenue* - This gives the total revenue (total income) for the date or period given.
+- *profit* - This gives the total profits (total income minus total costs) for the period given.
+
+The only *\<date>* options for *inventory* are either *today* or *yesterday*. For *revenue* and *profit* you can use the following arguments:
+- today - gives todays report. example: 
+```
+    > python main.py report profit today
+    Profit: today
+    Total profit today (2021-04-09) is:
+    € 20.10
+```
+- yesterday - gives yesterdays report
+```
+    > python main.py report revenue yesterday
+    Revenue: yesterday
+    Total revenue yesterday (2021-04-08) is:
+    € 10.0
+```
+- specific date - needs to be in YYYY-MM-DD format. This means a month or day with a single digit needs a 0 in front. For example the 9th of April 2021 is 2021-04-09. CLI example: 
+```
+    > python main.py report revenue 2021-03-29
+    Revenue: 2021-03-29
+    Total revenue on date (2021-03-29) is:
+    € 11.0
+```
+- whole month - needs to be in YYYY-MM format. This means a month with single digit needs a 0 in front. For example April 2021 is 2021-04. CLI example: 
+```
+    > python main.py report revenue 2021-03
+    Revenue: 2021-03
+    Total revenue in month (2021-03) is:
+    € 101.50
+```
+
+
 

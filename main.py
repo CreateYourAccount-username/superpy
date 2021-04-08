@@ -98,9 +98,9 @@ def cli_arguments():
     report_parser.add_argument('reporttype', help='Get \
                                 Inventory, Profit or Revenue report,\
                                 example: report inventory today', choices=['inventory', 'revenue', 'profit'])
-    report_parser.add_argument('--date', help='date, in YYYY-MM-DD format, or using the word today or yesterday. \
+    report_parser.add_argument('date', help='date, in YYYY-MM-DD format, or using the word today or yesterday. \
                                for profit and revenue you can also use YYYY-MM\
-                               to get report on whole month.', required=True)
+                               to get report on whole month.')
 
     args = parser.parse_args()
     return args
@@ -159,6 +159,19 @@ def create_inventory(reportdate='today', dict_needed='counted_inventory'):
     # print('\t Sold items removed, printing inventory_dicts:')
     # print(inventory_dicts)
 
+    # if expiry date is before current date, delete from dict
+    expired_dicts = []
+    for dictionaries in inventory_dicts:
+        expiry_date = date_functions.convert_str_to_date(
+            dictionaries['expiration date'])
+        if expiry_date < check_this_date:
+            # inventory_dicts.remove(dictionaries)
+            expired_dicts.append(dictionaries)
+    inventory_dicts = [
+        product for product in inventory_dicts if product not in expired_dicts]
+    # print('\t Expired items removed, printing inventory_dicts:')
+    # print(inventory_dicts)
+
     # This logic here is to differentiate reports done between 'today'
     # and 'yesterday'. If 'yesterday' the bought and sold items of today
     # should be removed
@@ -166,21 +179,11 @@ def create_inventory(reportdate='today', dict_needed='counted_inventory'):
     today_dict = []
     if reportdate == 'yesterday':
         for dictionaries in inventory_dicts:
-            product_date = dictionaries['Buy Date']
+            product_date = dictionaries['buy date']
             if product_date == check_this_date:
                 today_dict.append(dictionaries)
     inventory_dicts = [
         product for product in inventory_dicts if product not in today_dict]
-
-    # if expiry date is before current date, delete from dict
-
-    for dictionaries in inventory_dicts:
-        expiry_date = date_functions.convert_str_to_date(
-            dictionaries['expiration date'])
-        if expiry_date < check_this_date:
-            inventory_dicts.remove(dictionaries)
-    # print('\t Expired items removed, printing inventory_dicts:')
-    # print(inventory_dicts)
 
     # list unique products
     product_list = []
@@ -304,7 +307,7 @@ def report_revenue(reportdate, printvalue=True):
         else:
             console.print('Total revenue ' + print_string +
                           str(reportdate) + ') is:')
-        console.print(total_revenue)
+        console.print(f'[cyan]€ {total_revenue}[/cyan]')
     else:
         return total_revenue
 
