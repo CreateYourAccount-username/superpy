@@ -17,15 +17,17 @@ Python library required: _Rich_  (which can be installed using:
 
 <br/>
 
-# Getting started:
+# Installation:
+
+***XXXXXXXXXXX Create 'superpy' dir and pull from git***
 
 After pulling superpy to your local device, you will have 5 files:
+
+- *classes.py* - Handles the buy_item and sell_item classes.
 
 - *date_functions.py* - Basically handles anything to do with dates. Setting the current date or advancing the date. It also handles string to date conversions and vice versa. 
 
 - *file_functions.py* - Handles reading and writing files. Checks if superpy is running in the correct directory. And if necessary creates files required to run the program (normally just the first time).
-
-- *classes.py* - Handles the buy_item and sell_item classes.
 
 - *main.py* - Handles all CLI commands and also all the logic for adding/removeing/adjusting the inventory.
 
@@ -35,15 +37,15 @@ After you have run all the various commands at least once, you will also have th
 
 - *bought.csv* - Log of all bought items
 
-- *sold.csv* - Log of all sold items
+- *date.txt* - Stores date variable.
 
 - *inventory.csv* - Inventory file, used as a variable by the program.
 
-- *date.txt* - Stores date variable.
+- *sold.csv* - Log of all sold items
 
 # Using superpy
 
-Before you start, ***make sure the directory name is 'superpy'.***
+Before you start, ***make sure you are working from directory 'superpy'.***
 
 There are 4 different commands that you can use. 
 - buy
@@ -99,33 +101,40 @@ Make use of the *report* command by typing <code>python main.py advance-time \<t
 Where *\<type*> is the type of report and *\<date>* is the date or period you want the report for. 
 
 The following reports are possible:
-- *inventory *- This gives the inventory on the date given. 
+- *inventory* - This gives the inventory on the date given. 
 - *revenue* - This gives the total revenue (total income) for the date or period given.
-- *profit* - This gives the total profits (total income minus total costs) for the period given.
+- *profit* - This gives the total profits (total income minus total costs) for the date or period given.
 
 The only *\<date>* options for *inventory* are either *today* or *yesterday*. For *revenue* and *profit* you can use the following arguments:
-- today - gives todays report. example: 
+- today - gives todays report, for example: 
 ```
-    > python main.py report profit today
-    Profit: today
-    Total profit today (2021-04-09) is:
-    € 20.10
+    > python main.py report inventory today
+    Inventory now is:
+    ┏━━━━━━━━━━━━━━┳━━━━━━━┳━━━━━━━━━━━━━━━━━━━━━━┓
+    ┃ product name ┃ count ┃ earliest expiry date ┃
+    ┡━━━━━━━━━━━━━━╇━━━━━━━╇━━━━━━━━━━━━━━━━━━━━━━┩
+    │       orange │     2 │           2021-04-10 │
+    ├──────────────┼───────┼──────────────────────┤
+    │        apple │     3 │           2021-08-31 │
+    ├──────────────┼───────┼──────────────────────┤
+    │       banana │     6 │           2021-04-09 │
+    └──────────────┴───────┴──────────────────────┘
 ```
-- yesterday - gives yesterdays report
+- yesterday - gives yesterdays report, for example
 ```
     > python main.py report revenue yesterday
     Revenue: yesterday
     Total revenue yesterday (2021-04-08) is:
     € 10.0
 ```
-- specific date - needs to be in YYYY-MM-DD format. This means a month or day with a single digit needs a 0 in front. For example the 9th of April 2021 is 2021-04-09. CLI example: 
+- specific date - needs to be in YYYY-MM-DD format. This means a month or day with a single digit needs a 0 in front. For example the 9th of April 2021 is 2021-04-09. For example: 
 ```
     > python main.py report revenue 2021-03-29
     Revenue: 2021-03-29
     Total revenue on date (2021-03-29) is:
     € 11.0
 ```
-- whole month - needs to be in YYYY-MM format. This means a month with single digit needs a 0 in front. For example April 2021 is 2021-04. CLI example: 
+- whole month - needs to be in YYYY-MM format. This means a month with single digit needs a 0 in front. For example April 2021 is 2021-04. for example: 
 ```
     > python main.py report revenue 2021-03
     Revenue: 2021-03

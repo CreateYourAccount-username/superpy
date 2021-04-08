@@ -159,19 +159,6 @@ def create_inventory(reportdate='today', dict_needed='counted_inventory'):
     # print('\t Sold items removed, printing inventory_dicts:')
     # print(inventory_dicts)
 
-    # if expiry date is before current date, delete from dict
-    expired_dicts = []
-    for dictionaries in inventory_dicts:
-        expiry_date = date_functions.convert_str_to_date(
-            dictionaries['expiration date'])
-        if expiry_date < check_this_date:
-            # inventory_dicts.remove(dictionaries)
-            expired_dicts.append(dictionaries)
-    inventory_dicts = [
-        product for product in inventory_dicts if product not in expired_dicts]
-    # print('\t Expired items removed, printing inventory_dicts:')
-    # print(inventory_dicts)
-
     # This logic here is to differentiate reports done between 'today'
     # and 'yesterday'. If 'yesterday' the bought and sold items of today
     # should be removed
@@ -184,6 +171,19 @@ def create_inventory(reportdate='today', dict_needed='counted_inventory'):
                 today_dict.append(dictionaries)
     inventory_dicts = [
         product for product in inventory_dicts if product not in today_dict]
+
+    # if expiry date is before current date, delete from dict
+    expired_dicts = []
+    for dictionaries in inventory_dicts:
+        expiry_date = date_functions.convert_str_to_date(
+            dictionaries['expiration date'])
+        if expiry_date < check_this_date:
+            # inventory_dicts.remove(dictionaries)
+            expired_dicts.append(dictionaries)
+    inventory_dicts = [
+        product for product in inventory_dicts if product not in expired_dicts]
+    # print('\t Expired items removed, printing inventory_dicts:')
+    # print(inventory_dicts)
 
     # list unique products
     product_list = []
