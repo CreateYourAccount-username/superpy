@@ -55,7 +55,7 @@ There are 4 different commands that you can use.
 
 This is also reflected by using the command <code>python main.py -h</code>
 
-## advance-time
+## **advance-time**
 Make use of the *advance-time* command by typing <code>python main.py advance-time *x*</code>
 Where *x* can be substituted the following: 
 
@@ -93,23 +93,53 @@ Keep in mind the superpy software does not automatically advance its date every 
 Help can also be accessed from the command line using: 
 <code>python main.py advance-time -h</code>
 
-## buy 
+## **buy** 
+Make us of the *buy* command by typing <code>python main.py buy --product \<product> --price  \<price> --expiry  \<expiry>.</code>
 
-## sell
+- ### --product arguments
+Recommend using one word only, but you can use a string with spaces if you use quotes (' or "), for example: <code>-product 'apple pie'</code>. The short form is <code>-prod</code>, example:  <code>-prod 'apple pie'</code>.
+
+- ### --price arguments
+Price needs to be defined using <code>.</code> before a decimal. (not a <code>,</code> as is commonly used in The Netherlands). Example: <code> --price 1.15</code>. The short form is <code>-$ </code> (even though the program is in €, but € didn't seem to work in the terminal during testing), example <code> -$ 1.15</code>
+
+- ### --expiry arguments
+This date needs to be in ISO 8601 format (YYYY-MM-DD) format. This means a month or day with a single digit will need a 0 in front. For example, the 9th of April 2021 is 2021-04-09. For example <code>--expiry 2021-08-31</code>. Short form is <code>-exp</code>, example <code>--exp 2021-08-31</code>
+
+Examples of the buy command:
+```
+> python main.py buy --product apple --price 0.50 --expiry 2021-04-28
+Added apple to inventory
+```
+```
+> python main.py buy --prod 'apple pie' -$ 3.50 --exp 2021-04-28
+Added apple pie to inventory
+```
 
 
-## report
+Help can also be accessed from the command line using: 
+<code>python main.py buy -h</code>
+
+## **sell**
+
+
+## **report**
 Make use of the *report* command by typing <code>python main.py advance-time \<type> \<date>.</code>
 Where *\<type*> is the type of report and *\<date>* is the date or period you want the report for. 
+<br/>
 
 ### \<type> arguments
 The following reports are possible:
+
 - *inventory* - this gives the inventory on the date given. 
 - *revenue* - this gives the total revenue (total income) for the date or period given.
 - *profit* - this gives the total profits (total income minus total costs) for the date or period given.
+  
+<br/>
+
 ### \<date> arguments
 Note: **The only *\<date>* options for *inventory* are either *today* or *yesterday*.** For *revenue* and *profit* you can use all of the following arguments:
-- today - gives todays report, for example: 
+
+- *today* - gives todays report, for example: 
 ```
     > python main.py report inventory today
     Inventory now is:
@@ -123,21 +153,21 @@ Note: **The only *\<date>* options for *inventory* are either *today* or *yester
     │       banana │     6 │           2021-04-09 │
     └──────────────┴───────┴──────────────────────┘
 ```
-- yesterday - gives yesterdays report, for example
+- *yesterday* - gives yesterdays report, for example
 ```
     > python main.py report revenue yesterday
     Revenue: yesterday
     Total revenue yesterday (2021-04-08) is:
     € 10.0
 ```
-- specific date - needs to be in YYYY-MM-DD format. This means a month or day with a single digit will need a 0 in front. For example, the 9th of April 2021 is 2021-04-09. Example: 
+- *specific date* - needs to be in ISO 8601 format (YYYY-MM-DD). This means a month or day with a single digit will need a 0 in front. For example, the 9th of April 2021 is 2021-04-09. Example: 
 ```
     > python main.py report revenue 2021-03-29
     Revenue: 2021-03-29
     Total revenue on date (2021-03-29) is:
     € 11.0
 ```
-- whole month - needs to be in YYYY-MM format. This means a month with single digit needs a 0 in front. For example, April 2021 is 2021-04. Example: 
+- *whole month* - needs to be in YYYY-MM format. This means a month with single digit needs a 0 in front. For example, April 2021 is 2021-04. Example: 
 ```
     > python main.py report revenue 2021-03
     Revenue: 2021-03

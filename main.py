@@ -24,7 +24,11 @@ def main():
     if args.command == "report":
         report(args.reporttype, args.date)
     elif args.command == 'buy':
-        record_buy(args.product, args.price, args.expiry)
+        try:
+            date_functions.convert_str_to_date(args.expiry)
+            record_buy(args.product, args.price, args.expiry)
+        except IndexError:
+            print('indexerror')
     elif args.command == 'sell':
         record_sell(args.product, args.price)
     elif args.command == 'advance-time':
@@ -64,8 +68,8 @@ def cli_arguments():
                                       help='Add bought product to inventory')
     buy_parser.add_argument('-prod', '--product', type=str.lower,
                             help='name of product, example: --product apple', required=True)
-    buy_parser.add_argument('-€', '--price', type=float,
-                            help='cost price of item, example: --price 0.60',
+    buy_parser.add_argument('-$', '--price', type=float,
+                            help='cost price of item using a period (.), example: --price 0.60',
                             required=True)
     buy_parser.add_argument('-exp', '--expiry', type=str,
                             help='expiry date in YYYY-MM-DD format, for \

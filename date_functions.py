@@ -57,8 +57,7 @@ def convert_str_to_date(x):
         x = datetime.strptime(x, '%Y-%m-%d').date()
         return x
     except ValueError:
-        console.print(
-            '[red]ERROR: input is not a valid date[/red]')
+        console.print(f'[red]ERROR: {x} is not a valid date[/red]')
         quit()
 
 
@@ -72,8 +71,7 @@ def convert_str_to_month(x):
         x = datetime.strptime(x, '%Y-%m').date()
         return x
     except ValueError:
-        console.print(
-            '[red]ERROR: input is not a valid date[/red]')
+        console.print(f'[red]ERROR: {x} is not a valid date[/red]')
         quit()
 
 
