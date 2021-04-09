@@ -35,7 +35,7 @@ def yesterday():
 
 def advance_date(x):  # advance date by x days
     # create inventory before advancing date
-    inv = main.create_inventory(dict_needed='inventory_dicts')
+    inv = main.create_inventory(dict_needed='within_date_dicts')
     startdate = read_date()
     enddate = startdate + timedelta(days=x)
     enddate_date_object = enddate  # for use in if statement later
@@ -51,6 +51,7 @@ def advance_date(x):  # advance date by x days
                 + items['expiration date']
             # console.print(print_line, style='bold red')
             console.print(f'[bold red]Item "{print_line} [/bold red]')
+    return
 
 
 def futuredate():
@@ -65,8 +66,9 @@ def convert_str_to_date(x):
         return x
     except ValueError:
         console.print(
-            f'[red]ERROR: {x} is not a valid date (convert_str_to_date)[/red]')
+            f'[red]ERROR: {x} is not a valid date, check if date exists and make sure order is YYYY-MM-DD[/red]')
         sys.exit(1)
+    return
 
 
 def convert_date_to_str(x):

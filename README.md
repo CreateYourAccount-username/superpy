@@ -12,9 +12,11 @@ Superpy is designed and tested to run on a Windows 10 system.
 
 Python version required: _Python 3.9.2_
 
-Python library required: _Rich_  (which can be installed using: 
-<code>pip install rich</code>)
-
+Python library required: 
+    _Rich_  (which can be installed using: 
+    <code>pip install rich</code>)
+    _requests_ (which can be installed using: 
+    <code>pip install requests</code>)
 <br/>
 
 # Installation:
@@ -122,12 +124,16 @@ Help can also be accessed from the command line using:
 
 ## **sell**
 
-Make us of the *sell* command by typing <code>python main.py sell --product \<product> --price  \<price></code>.
+Make us of the *sell* command by typing <code>python main.py sell --product \<product> --price  \<price> --ding  \<ding></code>.
 - ### --product arguments
     Recommend using one word only, but you can use a string with spaces if you use quotes (' or "), for example: <code>-product 'apple pie'</code>. The short form is <code>-prod</code>, example:  <code>-prod 'apple pie'</code>.
 
 - ### --price arguments
     Price needs to be defined using <code>.</code> before a decimal. (not a <code>,</code> as is commonly used in The Netherlands). Example: <code> --price 1.15</code>. The short form is <code>-$ </code> (even though the program is in €, but € didn't seem to work in the terminal during testing), example <code> -$ 1.15</code>
+
+- ### --ding arguments
+    Can only be *on* or *off*, any other value will be rejected. This argument is optional and defaults to *off*. If set to *on*, it will initiate a HTTP GET webhook into your Homey home automation controller with a tag that includes the product sold, total revenue on the day and total profit on the day. See REPORT.md for more information. Use wisely, use is guaranteed to be annoying, hence default value is *off*.
+    Note: This cannot be used unless you have inserted the Homey Cloud ID into the code (see dingding() in main.py for more info)
 
 Examples of the *sell* command:
 ```
@@ -142,11 +148,16 @@ apple sold
 > python main.py sell --product 'apple pie' --price 6.45
 Item apple pie is not in stock, cannot sell what you don't have
 ```
+```
+> python main.py sell -prod 'toilet paper' -$ 5 --ding on
+toilet paper sold
+```
+
 Help can also be accessed from the command line using: 
 <code>python main.py sell -h</code>
 
 ## **report**
-Make use of the *report* command by typing <code>python main.py advance-time \<type> \<date>.</code>
+Make use of the *report* command by typing <code>python main.py advance-time \<type> --date \<date>.</code>
 Where *\<type*> is the type of report and *\<date>* is the date or period you want the report for. 
 <br/>
 
@@ -159,43 +170,59 @@ The following reports are possible:
   
 <br/>
 
-### \<date> arguments
-Note: **The only *\<date>* options for *inventory* are either *today* or *yesterday*.** For *revenue* and *profit* you can use all of the following arguments:
+### \<date> arguments (optional)
 
-- *today* - gives todays report, for example: 
+
+- *today* - this is de default value and gives todays report. if you don't specify --date, it will default to today, for example: 
 ```
-    > python main.py report inventory today
-    Inventory now is:
+    > python main.py report inventory
+               Inventory: today
     ┏━━━━━━━━━━━━━━┳━━━━━━━┳━━━━━━━━━━━━━━━━━━━━━━┓
     ┃ product name ┃ count ┃ earliest expiry date ┃
     ┡━━━━━━━━━━━━━━╇━━━━━━━╇━━━━━━━━━━━━━━━━━━━━━━┩
-    │       orange │     2 │           2021-04-10 │
+    │ mars_bar     │ 2     │ 2021-04-09           │
     ├──────────────┼───────┼──────────────────────┤
-    │        apple │     3 │           2021-08-31 │
-    ├──────────────┼───────┼──────────────────────┤
-    │       banana │     6 │           2021-04-09 │
+    │ snickers     │ 3     │ 2030-05-05           │
     └──────────────┴───────┴──────────────────────┘
+```
+```
+    > python main.py report inventory --date today
+                Inventory: today
+    ┏━━━━━━━━━━━━━━┳━━━━━━━┳━━━━━━━━━━━━━━━━━━━━━━┓
+    ┃ product name ┃ count ┃ earliest expiry date ┃
+    ┡━━━━━━━━━━━━━━╇━━━━━━━╇━━━━━━━━━━━━━━━━━━━━━━┩
+    │ mars_bar     │ 2     │ 2021-04-09           │
+    ├──────────────┼───────┼──────────────────────┤
+    │ snickers     │ 3     │ 2030-05-05           │
+    └──────────────┴───────┴──────────────────────┘
+```
+```
+    > python main.py report profit
+    Total profit today (2021-04-09) is:
+    € -16.98
+```
+```
+    > python main.py report profit --date today
+    Total profit today (2021-04-09) is:
+    € -16.98
 ```
 - *yesterday* - gives yesterdays report, for example
 ```
-    > python main.py report revenue yesterday
-    Revenue: yesterday
+    > python main.py report revenue --date yesterday
     Total revenue yesterday (2021-04-08) is:
-    € 10.0
+    € 0.00
 ```
 - *specific date* - needs to be in ISO 8601 format (YYYY-MM-DD). This means a month or day with a single digit will need a 0 in front. For example, the 9th of April 2021 is 2021-04-09. Example: 
 ```
-    > python main.py report revenue 2021-03-29
-    Revenue: 2021-03-29
-    Total revenue on date (2021-03-29) is:
-    € 11.0
+    > python main.py report revenue --date 2021-04-09
+    Total revenue on date (2021-04-09) is:
+    € 8.45
 ```
-- *whole month* - needs to be in YYYY-MM format. This means a month with single digit needs a 0 in front. For example, April 2021 is 2021-04. Example: 
+- *whole month* - this only works with *profit* and *revenue*, **not with *inventory***. Input is required to be in YYYY-MM format. This means a month with single digit needs a 0 in front. For example, April 2021 is 2021-04. Example: 
 ```
-    > python main.py report revenue 2021-03
-    Revenue: 2021-03
-    Total revenue in month (2021-03) is:
-    € 101.50
+    > python main.py report revenue --date 2021-04
+    Total revenue in month (2021-04) is:
+    € 8.45
 ```
 Help can also be accessed from the command line using: 
 <code>python main.py report -h</code>
