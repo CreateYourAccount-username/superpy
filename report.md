@@ -2,4 +2,5 @@ Please include a short, 300-word report that highlights three technical elements
 
 
 ![homey flow](https://github.com/CreateYourAccount-username/superpy/blob/CreateYourAccount-images/homey%20flow.png?raw=true)
-![alt text](https://github.com/[username]/[reponame]/blob/[branch]/image.jpg?raw=true)
+
+![phone notification](https://github.com/CreateYourAccount-username/superpy/blob/CreateYourAccount-images/notification.jpg?raw=true)
