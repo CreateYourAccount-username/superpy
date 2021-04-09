@@ -19,7 +19,8 @@ Python library required: _Rich_  (which can be installed using:
 
 # Installation:
 
-***XXXXXXXXXXX Create 'superpy' dir and pull from git***
+Use your terminal to navigate to the directory that you want to install superpy into. Then run the git clone command. Git cloning will create a superpy directory. So if you want to install <code>c:\winc_apps\superpy</code>, navigate to <code>c:\winc_apps\\</code> and then run the command: 
+<code>git clone https://github.com/CreateYourAccount-username/superpy.git</code>
 
 After pulling superpy to your local device, you will have 5 files:
 
@@ -94,18 +95,18 @@ Help can also be accessed from the command line using:
 <code>python main.py advance-time -h</code>
 
 ## **buy** 
-Make us of the *buy* command by typing <code>python main.py buy --product \<product> --price  \<price> --expiry  \<expiry>.</code>
+Make us of the *buy* command by typing <code>python main.py buy --product \<product> --price  \<price> --expiry  \<expiry></code>.
 
 - ### --product arguments
-Recommend using one word only, but you can use a string with spaces if you use quotes (' or "), for example: <code>-product 'apple pie'</code>. The short form is <code>-prod</code>, example:  <code>-prod 'apple pie'</code>.
+    Recommend using one word only, but you can use a string with spaces if you use quotes (' or "), for example: <code>-product 'apple pie'</code>. The short form is <code>-prod</code>, example:  <code>-prod 'apple pie'</code>.
 
 - ### --price arguments
-Price needs to be defined using <code>.</code> before a decimal. (not a <code>,</code> as is commonly used in The Netherlands). Example: <code> --price 1.15</code>. The short form is <code>-$ </code> (even though the program is in €, but € didn't seem to work in the terminal during testing), example <code> -$ 1.15</code>
+    Price needs to be defined using <code>.</code> before a decimal. (not a <code>,</code> as is commonly used in The Netherlands). Example: <code> --price 1.15</code>. The short form is <code>-$ </code> (even though the program is in €, but € didn't seem to work in the terminal during testing), example <code> -$ 1.15</code>
 
 - ### --expiry arguments
-This date needs to be in ISO 8601 format (YYYY-MM-DD) format. This means a month or day with a single digit will need a 0 in front. For example, the 9th of April 2021 is 2021-04-09. For example <code>--expiry 2021-08-31</code>. Short form is <code>-exp</code>, example <code>--exp 2021-08-31</code>
+    This date needs to be in ISO 8601 format (YYYY-MM-DD) format. This means a month or day with a single digit will need a 0 in front. For example, the 9th of April 2021 is 2021-04-09. For example <code>--expiry 2021-08-31</code>. Short form is <code>-exp</code>, example <code>--exp 2021-08-31</code>
 
-Examples of the buy command:
+Examples of the *buy* command:
 ```
 > python main.py buy --product apple --price 0.50 --expiry 2021-04-28
 Added apple to inventory
@@ -121,6 +122,28 @@ Help can also be accessed from the command line using:
 
 ## **sell**
 
+Make us of the *sell* command by typing <code>python main.py sell --product \<product> --price  \<price></code>.
+- ### --product arguments
+    Recommend using one word only, but you can use a string with spaces if you use quotes (' or "), for example: <code>-product 'apple pie'</code>. The short form is <code>-prod</code>, example:  <code>-prod 'apple pie'</code>.
+
+- ### --price arguments
+    Price needs to be defined using <code>.</code> before a decimal. (not a <code>,</code> as is commonly used in The Netherlands). Example: <code> --price 1.15</code>. The short form is <code>-$ </code> (even though the program is in €, but € didn't seem to work in the terminal during testing), example <code> -$ 1.15</code>
+
+Examples of the *sell* command:
+```
+> python main.py sell --product 'apple pie' --price 6.45
+apple pie sold
+```
+```
+> python main.py sell -prod apple -$ 2
+apple sold
+```
+```
+> python main.py sell --product 'apple pie' --price 6.45
+Item apple pie is not in stock, cannot sell what you don't have
+```
+Help can also be accessed from the command line using: 
+<code>python main.py sell -h</code>
 
 ## **report**
 Make use of the *report* command by typing <code>python main.py advance-time \<type> \<date>.</code>
@@ -174,6 +197,7 @@ Note: **The only *\<date>* options for *inventory* are either *today* or *yester
     Total revenue in month (2021-03) is:
     € 101.50
 ```
-
+Help can also be accessed from the command line using: 
+<code>python main.py report -h</code>
 
 

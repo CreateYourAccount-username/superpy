@@ -7,6 +7,7 @@ import file_functions
 from rich.console import Console
 from rich.table import Table
 
+
 # Do not change these lines.
 __winc_id__ = 'a2bc36ea784242e4989deb157d527ba0'
 __human_name__ = 'superpy'
@@ -26,9 +27,11 @@ def main():
     elif args.command == 'buy':
         try:
             date_functions.convert_str_to_date(args.expiry)
+        except ValueError:
+            console.print(
+                '[red]ERROR: Something went wrong in the buy command[/red]')
+        else:
             record_buy(args.product, args.price, args.expiry)
-        except IndexError:
-            print('indexerror')
     elif args.command == 'sell':
         record_sell(args.product, args.price)
     elif args.command == 'advance-time':
@@ -67,7 +70,7 @@ def cli_arguments():
     buy_parser = subparser.add_parser('buy',
                                       help='Add bought product to inventory')
     buy_parser.add_argument('-prod', '--product', type=str.lower,
-                            help='name of product, example: --product apple', required=True)
+                            help="name of product, example: --product apple or --product 'apple pie'", required=True)
     buy_parser.add_argument('-$', '--price', type=float,
                             help='cost price of item using a period (.), example: --price 0.60',
                             required=True)
@@ -79,10 +82,10 @@ def cli_arguments():
     sell_parser = subparser.add_parser('sell',
                                        help='sell product from inventory')
     sell_parser.add_argument('-prod', '--product', type=str.lower,
-                             help='name of product, example: --product apple',
+                             help="name of product, example: --product apple or --product 'apple pie'",
                              required=True)
-    sell_parser.add_argument('--price', type=float,
-                             help='cost price of item, example: --price 0.60',
+    sell_parser.add_argument('-$', '--price', type=float,
+                             help='cost price of item using a period (.), example: --price 0.60',
                              required=True)
 
     # Advance-time parser
@@ -102,9 +105,9 @@ def cli_arguments():
     report_parser.add_argument('reporttype', help='get \
                                 inventory, profit or revenue report,\
                                 example: report inventory today', choices=['inventory', 'revenue', 'profit'])
-    report_parser.add_argument('date', help='date, in YYYY-MM-DD format, or using the word today or yesterday. \
+    report_parser.add_argument('date', help="date, in YYYY-MM-DD format, or using the word 'today' or 'yesterday'. \
                                for profit and revenue you can also use YYYY-MM\
-                               to get report on whole month.')
+                               to get report on whole month.")
 
     args = parser.parse_args()
     return args
@@ -142,64 +145,63 @@ def record_buy(product_name, buy_price, expiration_date):
     console.print(f'[green]Added {product_name} to inventory[/green]')
 
 
-# date can be 'today' or 'yesterday'
 def create_inventory(reportdate='today', dict_needed='counted_inventory'):
     # read bought.csv file
     inventory_dicts = file_functions.read_csv_into_dict('bought.csv')
-    # Read sold.csv and note bought IDs, remove bought items from inventory
+    #console.print('[yellow]Printing inventory_dict with bought.csv items[/yellow]')
+    # console.print(inventory_dicts)
+    # Read sold.csv and note bought IDs, then remove those bought items from inventory
     sold_dicts = []
     with open('sold.csv', 'r', newline='') as csvfile:
         csv_reader = csv.DictReader(csvfile)
         for row in csv_reader:
             sold_dicts.append(row)
+    # console.print('Printing sold dicts')
+    # console.print(sold_dicts)
     bought_ID_list = []
     for dictionaries in sold_dicts:
         bought_ID_list.append(dictionaries['bought ID'])
-    # print(bought_ID_list)
-    # print(inventory_dicts)
-    for dictionaries in inventory_dicts:
-        if dictionaries['ID'] in bought_ID_list:
-            inventory_dicts.remove(dictionaries)
-    # print('\t Sold items removed, printing inventory_dicts:')
-    # print(inventory_dicts)
-
-    # This logic here is to differentiate reports done between 'today'
-    # and 'yesterday'. If 'yesterday' the bought and sold items of today
-    # should be removed
-    check_this_date = date_functions.read_date()
-    today_dict = []
-    if reportdate == 'yesterday':
-        for dictionaries in inventory_dicts:
-            product_date = dictionaries['buy date']
-            if product_date == check_this_date:
-                today_dict.append(dictionaries)
+    # console.print('Printing bought ID list')
+    # console.print(bought_ID_list)
     inventory_dicts = [
-        product for product in inventory_dicts if product not in today_dict]
+        product for product in inventory_dicts if product['ID'] not in bought_ID_list]
+    # console.print('[yellow]Printing inventory_dict with sold items removed[/yellow]')
+    # console.print(inventory_dicts)
 
-    # if expiry date is before current date, delete from dict
-    expired_dicts = []
+    # Catch reportdate today - yesterday - YYYY-MM-DD date
+    check_this_date = ''
+    if reportdate == 'today':
+        check_this_date = date_functions.read_date()
+    elif reportdate == 'yesterday':
+        check_this_date = date_functions.yesterday()
+    else:
+        check_this_date = date_functions.convert_str_to_date(reportdate)
+
+    within_date_dicts = []
     for dictionaries in inventory_dicts:
         expiry_date = date_functions.convert_str_to_date(
             dictionaries['expiration date'])
-        if expiry_date < check_this_date:
-            # inventory_dicts.remove(dictionaries)
-            expired_dicts.append(dictionaries)
-    inventory_dicts = [
-        product for product in inventory_dicts if product not in expired_dicts]
-    # print('\t Expired items removed, printing inventory_dicts:')
-    # print(inventory_dicts)
+        if expiry_date >= check_this_date:
+            within_date_dicts.append(dictionaries)
+    #console.print('Printing within date dicts')
+    # console.print(within_date_dicts)
+    # END RESULT IS WITHIN_DATE_DICTs
 
     # list unique products
     product_list = []
-    for dictionaries in inventory_dicts:
+    # make list with unique product names
+    for dictionaries in within_date_dicts:
         if dictionaries['product name'] not in product_list:
             product_list.append(dictionaries['product name'])
+    #console.print('Printing bought ID list')
+    # console.print(product_list)
     iteration = 0
+    # count number of products and take earliest expiry
     counted_inventory = []
     for x in range(len(product_list)):
         count = 0
         expiry_date = date_functions.futuredate()
-        for dictionaries in inventory_dicts:
+        for dictionaries in within_date_dicts:
             if dictionaries['product name'] == product_list[iteration]:
                 count += 1
                 if date_functions.convert_str_to_date(dictionaries['expiration date']) < expiry_date:
@@ -207,36 +209,44 @@ def create_inventory(reportdate='today', dict_needed='counted_inventory'):
                         dictionaries['expiration date'])
         counted_inventory.append({'product name': product_list[iteration],
                                   'count': count,
-                                  'earliest expiry date': expiry_date})
+                                  'earliest expiry date': date_functions.convert_date_to_str(expiry_date)})
         iteration += 1
+    #console.print('[yellow]Printing counted inventory[/yellow]')
+    # console.print(counted_inventory)
+    # END RESULT IS COUNTED_INVENTORY
 
+    # Write within_date_dicts to file
     with open('inventory.csv', 'w', newline='') as csvfile:
         field_names = ['product name', 'count', 'earliest expiry date']
         write = csv.DictWriter(csvfile, fieldnames=field_names)
         write.writeheader()
+        # write.writerows(within_date_dicts)
         write.writerows(counted_inventory)
 
-    if dict_needed == 'inventory_dicts':
-        return inventory_dicts
+    if dict_needed == 'within_date_dicts':
+        return within_date_dicts
     else:
         return counted_inventory
+        # return within_date_dicts
 
 
 def record_sell(product_name, sell_price):
-    inventory_dicts = create_inventory('today', dict_needed='inventory_dicts')
+    within_date_dicts = create_inventory(
+        'today', dict_needed='within_date_dicts')
 
     # Create list of items in stock with product name
     matching_product_stock_dict = []
     product_in_stock = False
 
-    for dictionaries in inventory_dicts:
+    for dictionaries in within_date_dicts:
         if dictionaries['product name'] == product_name:
             # print(product_name + ' in stock')
             matching_product_stock_dict.append(dictionaries)
             product_in_stock = True
 
     if product_in_stock is False:  # Error if not in stock
-        print('Item ' + product_name + ' is not in stock')
+        console.print(
+            f"[red]Item {product_name} is not in stock, cannot sell what you don't have")
         return
 
     # print('\t product names matched, printing matching product_stock_dict:')
@@ -356,22 +366,28 @@ def report_profit(reportdate):
 def report(reporttype, reportdate):
     if reporttype == 'inventory':
         if reportdate == 'today':
-            console.print('Inventory now is:')
             print_inventory(reportdate)
         elif reportdate == 'yesterday':
-            console.print('Inventory yesterday was:')
             print_inventory(reportdate)
+        elif len(reportdate) == 10 and reportdate[:3].isnumeric() and reportdate[4] == '-' and reportdate[5:6].isnumeric() and reportdate[7] == '-' and reportdate[8:9].isnumeric():
+            try:
+                date_functions.convert_str_to_date(reportdate)
+                print_inventory(reportdate)
+            except:
+                console.print(
+                    '[red]Something went wrong in the inventory report command[/red]')
         else:
-            print('inventory report can only accept "today" or "yesterday" as input')
+            console.print(
+                "[red]ERROR: inventory report can only accept 'today', 'yesterday', or YYYY-MM-DD as input")
     if reporttype == 'profit':
         if reportdate != 'today' and reportdate != 'yesterday':
             # YYYY-MM = 7 chars
             if len(reportdate) == 7 and reportdate[:3].isnumeric() and reportdate[4] == '-' and reportdate[5:6].isnumeric():
-                #console.print(f'Profit: {reportdate}')
+                # console.print(f'Profit: {reportdate}')
                 report_profit(reportdate)
            # YYYY-MM-DD = 10
             elif len(reportdate) == 10 and reportdate[:3].isnumeric() and reportdate[4] == '-' and reportdate[5:6].isnumeric() and reportdate[7] == '-' and reportdate[8:9].isnumeric():
-                #console.print(f'Profit: {reportdate}')
+                # console.print(f'Profit: {reportdate}')
                 report_profit(reportdate)
             else:
                 console.print(
@@ -382,11 +398,11 @@ def report(reporttype, reportdate):
         if reportdate != 'today' and reportdate != 'yesterday':
             # YYYY-MM = 7 chars
             if len(reportdate) == 7 and reportdate[:3].isnumeric() and reportdate[4] == '-' and reportdate[5:6].isnumeric():
-                #console.print(f'Profit: {reportdate}')
+                # console.print(f'Profit: {reportdate}')
                 report_revenue(reportdate)
            # YYYY-MM-DD = 10
             elif len(reportdate) == 10 and reportdate[:3].isnumeric() and reportdate[4] == '-' and reportdate[5:6].isnumeric() and reportdate[7] == '-' and reportdate[8:9].isnumeric():
-                #console.print(f'Profit: {reportdate}')
+                # console.print(f'Profit: {reportdate}')
                 report_revenue(reportdate)
             else:
                 console.print(
@@ -403,14 +419,19 @@ def print_inventory(reportdate):
     else:
         with open('inventory.csv', 'r', newline='') as csvfile:
             csv_reader = csv.DictReader(csvfile)
-            headers = csv_reader.fieldnames
-            table = Table(header_style='bold cyan', show_lines=True)
-            for header in headers:
-                table.add_column(header, justify="right", style="pink3",
-                                 no_wrap=True)
+            headers = [csv_reader.fieldnames]
+            title_string = 'Inventory: ' + reportdate
+            table = Table(title=title_string,
+                          header_style='bold cyan', show_lines=True)
+            table.add_column('product name', style='pink3', no_wrap=True)
+            table.add_column('count', style='pink3', no_wrap=True)
+            table.add_column('earliest expiry date',
+                             style='pink3', no_wrap=True)
+
             for row in csv_reader:
                 print_values = list(row.values())
                 table.add_row(*print_values)
+
             console.print(table)
 
 

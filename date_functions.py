@@ -2,6 +2,7 @@ from datetime import date, timedelta, datetime
 import file_functions
 from rich.console import Console
 import main
+import sys
 
 console = Console(style='cyan')
 
@@ -24,6 +25,12 @@ def write_date(newdate):  # Write new date to date.txt
         file_contents.write(newdate)
         file_contents.close
         return
+
+
+def yesterday():
+    today = read_date()
+    yesterday = today + timedelta(days=-1)
+    return yesterday
 
 
 def advance_date(x):  # advance date by x days
@@ -57,8 +64,9 @@ def convert_str_to_date(x):
         x = datetime.strptime(x, '%Y-%m-%d').date()
         return x
     except ValueError:
-        console.print(f'[red]ERROR: {x} is not a valid date[/red]')
-        quit()
+        console.print(
+            f'[red]ERROR: {x} is not a valid date (convert_str_to_date)[/red]')
+        sys.exit(1)
 
 
 def convert_date_to_str(x):
