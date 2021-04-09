@@ -64,7 +64,7 @@ def cli_arguments():
                                       help='Add bought product to inventory')
     buy_parser.add_argument('-prod', '--product', type=str.lower,
                             help='name of product, example: --product apple', required=True)
-    buy_parser.add_argument('--price', type=float,
+    buy_parser.add_argument('-€', '--price', type=float,
                             help='cost price of item, example: --price 0.60',
                             required=True)
     buy_parser.add_argument('-exp', '--expiry', type=str,
@@ -95,8 +95,8 @@ def cli_arguments():
     # Report parser
     report_parser = subparser.add_parser(
         'report', help='inventory, profit or revenue report')
-    report_parser.add_argument('reporttype', help='Get \
-                                Inventory, Profit or Revenue report,\
+    report_parser.add_argument('reporttype', help='get \
+                                inventory, profit or revenue report,\
                                 example: report inventory today', choices=['inventory', 'revenue', 'profit'])
     report_parser.add_argument('date', help='date, in YYYY-MM-DD format, or using the word today or yesterday. \
                                for profit and revenue you can also use YYYY-MM\
@@ -307,7 +307,7 @@ def report_revenue(reportdate, printvalue=True):
         else:
             console.print('Total revenue ' + print_string +
                           str(reportdate) + ') is:')
-        console.print(f'[cyan]€ {total_revenue}[/cyan]')
+        console.print('[cyan]€ {:.2f}[/cyan]'.format(total_revenue))
     else:
         return total_revenue
 
@@ -336,7 +336,7 @@ def report_profit(reportdate):
                 total_cost = total_cost + float(dictionaries['buy price'])
     # get revenue for same period:
     total_revenue = report_revenue(get_revenue_date, False)
-    total_profit = round((total_revenue - total_cost), 2)
+    total_profit = total_revenue - total_cost
     if print_string == 'in month (':
         console.print('Total profit ' + print_string +
                       str(reportdate)[0:7] + ') is:')
@@ -344,9 +344,9 @@ def report_profit(reportdate):
         console.print('Total profit ' + print_string +
                       str(reportdate) + ') is:')
     if total_profit >= 0:
-        console.print(f'[green]€ {str(total_profit)}[/green]')
+        console.print('[green]€ {:.2f}[/green]'.format(total_profit))
     else:
-        console.print(f'[red]€ {str(total_profit)}[/red]')
+        console.print('[red]€ {:.2f}[/red]'.format(total_profit))
 
 
 def report(reporttype, reportdate):
@@ -360,11 +360,36 @@ def report(reporttype, reportdate):
         else:
             print('inventory report can only accept "today" or "yesterday" as input')
     if reporttype == 'profit':
-        console.print(f'Profit: {reportdate}')
-        report_profit(reportdate)
+        if reportdate != 'today' and reportdate != 'yesterday':
+            # YYYY-MM = 7 chars
+            if len(reportdate) == 7 and reportdate[:3].isnumeric() and reportdate[4] == '-' and reportdate[5:6].isnumeric():
+                #console.print(f'Profit: {reportdate}')
+                report_profit(reportdate)
+           # YYYY-MM-DD = 10
+            elif len(reportdate) == 10 and reportdate[:3].isnumeric() and reportdate[4] == '-' and reportdate[5:6].isnumeric() and reportdate[7] == '-' and reportdate[8:9].isnumeric():
+                #console.print(f'Profit: {reportdate}')
+                report_profit(reportdate)
+            else:
+                console.print(
+                    "[red]ERROR: date has to be 'today', 'yesterday', YYYY-MM or YYYY-MM-DD [/red]")
+        else:
+            report_profit(reportdate)
     if reporttype == 'revenue':
-        console.print(f'Revenue: {reportdate}')
-        report_revenue(reportdate)
+        if reportdate != 'today' and reportdate != 'yesterday':
+            # YYYY-MM = 7 chars
+            if len(reportdate) == 7 and reportdate[:3].isnumeric() and reportdate[4] == '-' and reportdate[5:6].isnumeric():
+                #console.print(f'Profit: {reportdate}')
+                report_revenue(reportdate)
+           # YYYY-MM-DD = 10
+            elif len(reportdate) == 10 and reportdate[:3].isnumeric() and reportdate[4] == '-' and reportdate[5:6].isnumeric() and reportdate[7] == '-' and reportdate[8:9].isnumeric():
+                #console.print(f'Profit: {reportdate}')
+                report_revenue(reportdate)
+            else:
+                console.print(
+                    "[red]ERROR: date has to be 'today', 'yesterday', YYYY-MM or YYYY-MM-DD [/red]")
+        else:
+            report_revenue(reportdate)
+        # console.print(f'Revenue: {reportdate}')
 
 
 def print_inventory(reportdate):

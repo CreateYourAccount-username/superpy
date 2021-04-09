@@ -57,9 +57,9 @@ def convert_str_to_date(x):
         x = datetime.strptime(x, '%Y-%m-%d').date()
         return x
     except ValueError:
-        print(
-            'ERROR:  Incorrect date, if you want to report on whole month,\
-                 type "date YYYY-MM"')
+        console.print(
+            '[red]ERROR: input is not a valid date[/red]')
+        quit()
 
 
 def convert_date_to_str(x):
@@ -68,8 +68,13 @@ def convert_date_to_str(x):
 
 
 def convert_str_to_month(x):
-    x = datetime.strptime(x, '%Y-%m').date()
-    return x
+    try:
+        x = datetime.strptime(x, '%Y-%m').date()
+        return x
+    except ValueError:
+        console.print(
+            '[red]ERROR: input is not a valid date[/red]')
+        quit()
 
 
 def first_day_next_month(x):
