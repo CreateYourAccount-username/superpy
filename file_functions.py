@@ -24,7 +24,7 @@ def checkdir():  # Check current working directory is \superpy
             with open('sold.csv', 'a', newline='') as newfile:
                 newfile.write(
                     'ID,bought ID,sell date,sell price\n')
-        return True
+        return True  # required?
     else:
         raise Exception('\tERROR Change working directory to \\superpy')
 
