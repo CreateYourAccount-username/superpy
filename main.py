@@ -438,7 +438,6 @@ def export(reportdate):
     # Creates up to date inventory.csv
     inventory, printdate = create_inventory(reportdate)
     printdate = date_functions.convert_date_to_str(printdate)
-    print(printdate)
     if inventory == []:
         console.print(
             f'[bold red]ERROR: inventory (date: {reportdate}) is empty, file will not be exported.[/bold red]')

@@ -52,11 +52,12 @@ After you have run all the various commands at least once, you will also have th
 
 Before you start, ***make sure you are working from directory 'superpy'.***
 
-There are 4 different commands that you can use. 
+There are 5 different commands that you can use. 
+- advance-time
 - buy
 - sell
-- advance-time
 - report
+- export
 
 This is also reflected by using the command <code>python main.py -h</code>
 
@@ -102,7 +103,7 @@ Help can also be accessed from the command line using:
 Make us of the *buy* command by typing <code>python main.py buy --product \<product> --price  \<price> --expiry  \<expiry></code>.
 
 - ### --product arguments
-    Recommend using one word only, but you can use a string with spaces if you use quotes (' or "), for example: <code>-product 'apple pie'</code>. The short form is <code>-prod</code>, example:  <code>-prod 'apple pie'</code>.
+    Recommend using one word only, but you can use a string with spaces if you use quotes (' or "), for example: <code>--product 'apple pie'</code>. The short form is <code>-prod</code>, example:  <code>-prod 'apple pie'</code>.
 
 - ### --price arguments
     Price needs to be defined using <code>.</code> before a decimal. (not a <code>,</code> as is commonly used in The Netherlands). Example: <code> --price 1.15</code>. The short form is <code>-$ </code> (even though the program is in €, but € didn't seem to work in the terminal during testing), example <code> -$ 1.15</code>
@@ -159,7 +160,7 @@ Help can also be accessed from the command line using:
 <code>python main.py sell -h</code>
 
 ## **report**
-Make use of the *report* command by typing <code>python main.py advance-time \<type> --date \<date>.</code>
+Make use of the *report* command by typing <code>python main.py report \<type> --date \<date>.</code>
 Where *\<type*> is the type of report and *\<date>* is the date or period you want the report for. 
 <br/>
 
@@ -228,5 +229,30 @@ The following reports are possible:
 ```
 Help can also be accessed from the command line using: 
 <code>python main.py report -h</code>
+
+## **export**
+
+The export command will export a .csv file of the inventory on the day that is requested. The .csv file can be found in the superpy\export directory. The filename will consist of the requested date and a timestamp.
+
+Make use of the *export* command by typing <code>python main.py export --date \<date>.</code>
+
+### \<date> arguments (optional)
+
+- *today* - this is the default value and gives todays report. if you don't specify --date, it will default to today, for example: 
+```
+    > python main.py export
+            1 file(s) copied.
+```
+- *yesterday* - gives yesterdays report, for example
+```
+    > python main.py export --date yesterday
+            1 file(s) copied.
+```
+- *specific date* - needs to be in ISO 8601 format (YYYY-MM-DD). This means a month or day with a single digit will need a 0 in front. For example, the 9th of April 2021 is 2021-04-09. Example:
+```
+    > python main.py export --date 2021-04-19
+            1 file(s) copied.
+```
+
 
 
