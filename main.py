@@ -282,7 +282,7 @@ def create_inventory(reportdate='today', dict_needed='counted_inventory'):
     if dict_needed == 'inventory_within_date':  # only required for record_sell()
         return inventory_within_date
     else:
-        return counted_inventory
+        return counted_inventory, check_this_date
 
 
 def record_sell(product_name, sell_price, ding):
@@ -436,13 +436,15 @@ def richprint_inventory(reportdate):
 
 def export(reportdate):
     # Creates up to date inventory.csv
-    inventory = create_inventory(reportdate)
+    inventory, printdate = create_inventory(reportdate)
+    printdate = date_functions.convert_date_to_str(printdate)
+    print(printdate)
     if inventory == []:
         console.print(
             f'[bold red]ERROR: inventory (date: {reportdate}) is empty, file will not be exported.[/bold red]')
     else:
-        # Assemble filename YYYY-MM-DD--HH:MM:SS
-        filename = date_functions.createfilename() + '--inventory.csv'
+        filename = 'inventory-date-' + printdate + '___generated_on--' + \
+            date_functions.datetimestring() + '.csv'
         # Copy inventory.csv to new filename.csv
         file_functions.copy_inventory_to_file(filename)
 

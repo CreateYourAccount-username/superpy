@@ -32,7 +32,7 @@ def yesterday():
 
 def advance_date(x):  # advance date by x days
     # create inventory before advancing date
-    inv = main.create_inventory(dict_needed='within_date_dicts')
+    inv = main.create_inventory(dict_needed='inventory_within_date')
     startdate = read_date()
     enddate = startdate + timedelta(days=x)
     enddate_date_object = enddate  # for use in if statement later
@@ -125,7 +125,7 @@ def first_day_next_month(x):  # used in report_handle_date()
     return month_later
 
 
-def createfilename():
+def datetimestring():
     # Filename is YYYY-MM-DD--HH:MM:SS
-    filename = datetime.now().strftime('%Y-%m-%d--%H-%M-%S')
-    return filename
+    datetimestring = datetime.now().strftime('%Y-%m-%d--%H-%M-%S')
+    return datetimestring
