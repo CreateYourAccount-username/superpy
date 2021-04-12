@@ -10,7 +10,6 @@ class buy_item():
 
 
 class sell_item():
-
     def __init__(self, id_num, bought_id, sell_date, sell_price):
         self.id_num = id_num
         self.bought_id = bought_id

@@ -1,30 +1,27 @@
-from datetime import date, timedelta, datetime
-import file_functions
-from rich.console import Console
-import main
-import sys
+from datetime import date, timedelta, datetime  # Allows for date calculations
+import file_functions                           # To read/write files
+from rich.console import Console                # Pretty console printing
+import main                                     # Need inventory for advance_date()
+import sys                                      # Used to exit program if error occurs
 
 console = Console(style='cyan')
 
 
 def read_date():  # Read current date from date.txt
-    if file_functions.checkdir() is True:
-        # Read current date in date.txt
-        file_contents = open('date.txt', 'r')
-        currentdate = file_contents.readline()
-        currentdate = convert_str_to_date(currentdate)
-        file_contents.close()
-        return currentdate
+    file_contents = open('date.txt', 'r')
+    currentdate = file_contents.readline()
+    currentdate = convert_str_to_date(currentdate)
+    file_contents.close()
+    return currentdate
 
 
 def write_date(newdate):  # Write new date to date.txt
-    if file_functions.checkdir() is True:
-        if newdate == 'today':  # if input is today set today's date
-            newdate = str(date.today())
-        file_contents = open('date.txt', 'w')
-        file_contents.write(newdate)
-        file_contents.close
-        return
+    if newdate == 'today':  # if input is today set today's date
+        newdate = str(date.today())
+    file_contents = open('date.txt', 'w')
+    file_contents.write(newdate)
+    file_contents.close
+    return
 
 
 def yesterday():
@@ -49,7 +46,6 @@ def advance_date(x):  # advance date by x days
         if exp_date < enddate_date_object:
             print_line = items['product name'] + '" expired on: ' \
                 + items['expiration date']
-            # console.print(print_line, style='bold red')
             console.print(f'[bold red]Item "{print_line} [/bold red]')
     return
 
@@ -66,7 +62,7 @@ def convert_str_to_date(x):
         return x
     except ValueError:
         console.print(
-            f'[red]ERROR: {x} is not a valid date, check if date exists and make sure order is YYYY-MM-DD[/red]')
+            f'[red]ERROR: {x} is not a valid date, check if date exists and make sure order is correct: YYYY-MM-DD[/red]')
         sys.exit(1)
     return
 
@@ -83,24 +79,6 @@ def convert_str_to_month(x):
     except ValueError:
         console.print(f'[red]ERROR: {x} is not a valid date[/red]')
         quit()
-
-
-def first_day_next_month(x):
-    # split into year and month
-    month = datetime.strftime(x, '%m')
-    year = datetime.strftime(x, '%Y')
-    # go to next calendar month
-    if month == '12':
-        year = int(year) + 1
-        year = str(year)
-        month = 1
-    else:
-        month = int(month) + 1
-        month = str(month)
-    # form into string and then date object
-    month_later = year + '-' + month
-    month_later = datetime.strptime(month_later, '%Y-%m').date()
-    return month_later
 
 
 def report_handle_date(reportdate):
@@ -122,8 +100,32 @@ def report_handle_date(reportdate):
     elif len(reportdate) == 7:  # YYYY-MM object
         # take current month
         reportdate = convert_str_to_month(reportdate)
-        # x is now the first day of the month, want the last day as well
+        # reportdate is now the first day of the month, want the last day as well
         end_date = first_day_next_month(reportdate)
         date_is_whole_month = True
         print_string = 'in month ('
     return reportdate, date_is_whole_month, end_date, print_string
+
+
+def first_day_next_month(x):  # used in report_handle_date()
+    # split into year and month
+    month = datetime.strftime(x, '%m')
+    year = datetime.strftime(x, '%Y')
+    # go to next calendar month
+    if month == '12':
+        year = int(year) + 1
+        year = str(year)
+        month = 1
+    else:
+        month = int(month) + 1
+        month = str(month)
+    # form into string and then date object
+    month_later = year + '-' + month
+    month_later = datetime.strptime(month_later, '%Y-%m').date()
+    return month_later
+
+
+def createfilename():
+    # Filename is YYYY-MM-DD--HH:MM:SS
+    filename = datetime.now().strftime('%Y-%m-%d--%H-%M-%S')
+    return filename
