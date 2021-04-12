@@ -254,5 +254,6 @@ Make use of the *export* command by typing <code>python main.py export --date \<
             1 file(s) copied.
 ```
 
-
+Help can also be accessed from the command line using: 
+<code>python main.py export -h</code>
 
